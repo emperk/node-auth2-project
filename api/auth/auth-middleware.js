@@ -1,8 +1,7 @@
 const { JWT_SECRET } = require("../secrets"); // use this secret!
-const { findBy } = require('../users/users-model');
+const { findBy, find } = require('../users/users-model');
 const jwt = require('jsonwebtoken');
-const { default: jwtDecode } = require('jwt-decode');
-
+const { default: jwtDecode } = require("jwt-decode");
 const restricted = (req, res, next) => {
   /*
     If the user does not provide a token in the Authorization header:
@@ -34,9 +33,9 @@ const restricted = (req, res, next) => {
       next()
     }
   })
-}
+} 
 
-const only = role_name => (req, res, next) => {
+const only = (role_name) => (req, res, next) => {
   /*
     If the user does not provide a token in the Authorization header with a role_name
     inside its payload matching the role_name passed to this function as its argument:
@@ -56,7 +55,7 @@ const only = role_name => (req, res, next) => {
     })
   }
 }
-  
+
 
 const checkUsernameExists = async (req, res, next) => {
   /*
@@ -70,7 +69,7 @@ const checkUsernameExists = async (req, res, next) => {
     const [user] = await findBy({ username: req.body.username })
     if (!user) {
       next({
-        status: 422,
+        status: 401,
         message: 'Invalid credentials'
       })
     } else {
@@ -81,6 +80,7 @@ const checkUsernameExists = async (req, res, next) => {
     next(err)
   }
 }
+
 
 const validateRoleName = (req, res, next) => {
   /*
